@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - spring.datasource.url=jdbc:postgresql://db:5432/sample
+      - spring.datasource.username=sample
+      - spring.datasource.password=sample
+      - spring.jpa.hibernate.ddl-auto=create   
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - posgre_db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: sample
+      POSTGRES_PASSWORD: sample
+      POSTGRES_DB: sample
+      PGDATA: /var/lib/postgresql/data/pgdata
+volumes:
+    posgre_db: {}
